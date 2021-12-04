@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from yatube_api.settings import COMMENT_STR_LEN, POST_MEDIA_UPLOAD_TO, POST_STR_LEN
+from yatube_api.settings import (COMMENT_STR_LEN, POST_MEDIA_UPLOAD_TO,
+                                 POST_STR_LEN)
 
 User = get_user_model()
 
