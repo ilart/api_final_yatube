@@ -7,17 +7,6 @@ from yatube_api.settings import (COMMENT_STR_LEN, POST_MEDIA_UPLOAD_TO,
 User = get_user_model()
 
 
-class CreatedModel(models.Model):
-    created = models.DateTimeField(
-        'Дата создания',
-        auto_now_add=True
-    )
-
-    class Meta:
-        abstract = True
-        ordering = ('created',)
-
-
 class Group(models.Model):
     title = models.CharField(
         max_length=200,
@@ -39,7 +28,7 @@ class Group(models.Model):
         return self.title
 
 
-class Post(CreatedModel):
+class Post(models.Model):
     text = models.TextField(verbose_name='Текст поста')
     author = models.ForeignKey(
         User,
@@ -75,7 +64,7 @@ class Post(CreatedModel):
         return self.text[:POST_STR_LEN]
 
 
-class Comment(CreatedModel):
+class Comment(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -90,9 +79,15 @@ class Comment(CreatedModel):
         verbose_name='Пост'
     )
 
-    class Meta(CreatedModel.Meta):
+    created = models.DateTimeField(
+        'Дата создания',
+        auto_now_add=True
+    )
+
+    class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+        ordering = ('created', )
 
     def __str__(self):
         return self.text[:COMMENT_STR_LEN]
@@ -104,8 +99,7 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='follower',
         verbose_name='Подписчик',
-        blank=True,
-        null=True,
+        blank=True
     )
 
     following = models.ForeignKey(
@@ -120,4 +114,4 @@ class Follow(models.Model):
         verbose_name_plural = 'Подписки'
 
     def __str__(self):
-        return f'{self.user.id} -> {self.following.id}'
+        return f'{self.user.username} -> {self.following.username}'
