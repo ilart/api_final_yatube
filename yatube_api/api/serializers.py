@@ -1,6 +1,5 @@
 from rest_framework import serializers, validators
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from posts.models import Comment, Follow, Group, Post
 
 SELF_FOLLOW_FORBIDDEN = 'Подписка на самогосебя запрещена.'
