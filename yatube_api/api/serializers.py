@@ -35,15 +35,10 @@ class FollowSerializer(serializers.ModelSerializer):
         queryset=User.objects.all()
     )
 
-    def validate(self, data):
-        try:
-            data['following'] = User.objects.get(username=data['following'])
-        except ObjectDoesNotExist as error:
-            raise serializers.ValidationError(error)
-        data['user'] = self.context['request'].user
-        if data['following'] == data['user']:
+    def validate_following(self, following):
+        if following == self.context['request'].user:
             raise serializers.ValidationError(SELF_FOLLOW_FORBIDDEN)
-        return data
+        return following
 
     class Meta:
         model = Follow
